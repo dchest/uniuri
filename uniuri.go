@@ -44,7 +44,7 @@ func NewLen(length int) string {
 // of the provided byte slice of allowed characters (maximum 256).
 func NewLenChars(length int, chars []byte) string {
 	b := make([]byte, length)
-	if _, err := rand.Reader.Read(b); err != nil {
+	if _, err := rand.Read(b); err != nil {
 		panic("error reading from random source: " + err.String())
 	}
 	alen := byte(len(chars))
