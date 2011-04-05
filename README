@@ -42,15 +42,15 @@ FUNCTIONS
 
 func New() string
 
-New returns a new random string with the standard length and standard
-characters.
+New returns a new random string of the standard length, consisting of
+standard characters.
 
 func NewLen(length int) string
 
-NewLen returns a new random string with the provided length and standard
-characters.
+NewLen returns a new random string of the provided length, consisting of
+standard characters.
 
 func NewLenChars(length int, chars []byte) string
 
-NewLenChars returns a new random string with the provided length and byte
-slice of allowed characters (maximum 256).
+NewLenChars returns a new random string of the provided length, consisting
+of the provided byte slice of allowed characters (maximum 256).
