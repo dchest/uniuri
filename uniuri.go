@@ -28,20 +28,20 @@ const (
 // Standard characters allowed in uniuri string.
 var StdChars = []byte("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890")
 
-// New returns a new random string with the standard length and standard
-// characters.
+// New returns a new random string of the standard length, consisting of
+// standard characters.
 func New() string {
 	return NewLenChars(StdLen, StdChars)
 }
 
-// NewLen returns a new random string with the provided length and standard
-// characters.
+// NewLen returns a new random string of the provided length, consisting of
+// standard characters.
 func NewLen(length int) string {
 	return NewLenChars(length, StdChars)
 }
 
-// NewLenChars returns a new random string with the provided length and byte
-// slice of allowed characters (maximum 256).
+// NewLenChars returns a new random string of the provided length, consisting
+// of the provided byte slice of allowed characters (maximum 256).
 func NewLenChars(length int, chars []byte) string {
 	b := make([]byte, length)
 	if _, err := rand.Reader.Read(b); err != nil {
