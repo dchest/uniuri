@@ -16,6 +16,7 @@
 package uniuri
 
 import "crypto/rand"
+import "io"
 
 const (
 	// Standard length of uniuri string to achive ~95 bits of entropy.
@@ -44,7 +45,7 @@ func NewLen(length int) string {
 // of the provided byte slice of allowed characters (maximum 256).
 func NewLenChars(length int, chars []byte) string {
 	b := make([]byte, length)
-	if _, err := rand.Read(b); err != nil {
+	if _, err := io.ReadFull(rand.Reader, b); err != nil {
 		panic("error reading from random source: " + err.String())
 	}
 	alen := byte(len(chars))
