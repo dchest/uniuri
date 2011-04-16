@@ -1,7 +1,7 @@
-PACKAGE
+Package uniuri
+=====================
 
-package uniuri
-import "github.com/dchest/uniuri"
+	import "github.com/dchest/uniuri"
 
 Package uniuri generates random strings good for use in URIs to identify
 unique objects.
@@ -20,37 +20,48 @@ Functions read from crypto/rand random source, and panic if they fail to
 read from it.
 
 
-CONSTANTS
+Constants
+---------
 
-const (
-    // Standard length of uniuri string to achive ~95 bits of entropy.
-    StdLen = 16
-    // Length of uniurl string to achive ~119 bits of entropy, closest
-    // to what can be losslessly converted to UUIDv4 (122 bits).
-    UUIDLen = 20
-)
+	const (
+	    // Standard length of uniuri string to achive ~95 bits of entropy.
+	    StdLen = 16
+	    // Length of uniurl string to achive ~119 bits of entropy, closest
+	    // to what can be losslessly converted to UUIDv4 (122 bits).
+	    UUIDLen = 20
+	)
 
 
-VARIABLES
 
-var StdChars = []byte("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890")
+Variables
+---------
+
+	var StdChars = []byte("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
 
 Standard characters allowed in uniuri string.
 
 
-FUNCTIONS
+Functions
+---------
 
-func New() string
+### func New
 
+	func New() string
+	
 New returns a new random string of the standard length, consisting of
 standard characters.
 
-func NewLen(length int) string
+### func NewLen
 
+	func NewLen(length int) string
+	
 NewLen returns a new random string of the provided length, consisting of
 standard characters.
 
-func NewLenChars(length int, chars []byte) string
+### func NewLenChars
 
+	func NewLenChars(length int, chars []byte) string
+	
 NewLenChars returns a new random string of the provided length, consisting
 of the provided byte slice of allowed characters (maximum 256).
+
