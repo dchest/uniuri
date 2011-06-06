@@ -45,12 +45,25 @@ func NewLen(length int) string {
 // of the provided byte slice of allowed characters (maximum 256).
 func NewLenChars(length int, chars []byte) string {
 	b := make([]byte, length)
-	if _, err := io.ReadFull(rand.Reader, b); err != nil {
-		panic("error reading from random source: " + err.String())
+	r := make([]byte, length+(length/4)) // storage for random bytes.
+	clen := byte(len(chars))
+	maxrb := byte(256 - (256 % len(chars)))
+	i := 0
+	for {
+		if _, err := io.ReadFull(rand.Reader, r); err != nil {
+			panic("error reading from random source: " + err.String())
+		}
+		for _, c := range r {
+			if c >= maxrb {
+				// Skip this number to avoid modulo bias.
+				continue
+			}
+			b[i] = chars[c%clen]
+			i++
+			if i == length {
+				return string(b)
+			}
+		}
 	}
-	alen := byte(len(chars))
-	for i, c := range b {
-		b[i] = chars[c%alen]
-	}
-	return string(b)
+	panic("unreachable")
 }
