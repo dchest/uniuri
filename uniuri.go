@@ -51,7 +51,7 @@ func NewLenChars(length int, chars []byte) string {
 	i := 0
 	for {
 		if _, err := io.ReadFull(rand.Reader, r); err != nil {
-			panic("error reading from random source: " + err.String())
+			panic("error reading from random source: " + err.Error())
 		}
 		for _, c := range r {
 			if c >= maxrb {

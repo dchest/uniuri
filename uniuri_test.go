@@ -12,7 +12,7 @@ func TestNew(t *testing.T) {
 	for _, c := range u {
 		var present bool
 		for _, a := range StdChars {
-			if int(a) == c {
+			if rune(a) == c {
 				present = true
 			}
 		}
