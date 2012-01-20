@@ -15,8 +15,10 @@
 // read from it.
 package uniuri
 
-import "crypto/rand"
-import "io"
+import (
+	"crypto/rand"
+	"io"
+)
 
 const (
 	// Standard length of uniuri string to achive ~95 bits of entropy.
