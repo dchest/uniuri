@@ -1,14 +1,18 @@
 Package uniuri
 =====================
 
-	import "github.com/dchest/uniuri"
+```go
+import "github.com/dchest/uniuri"
+```
 
 Package uniuri generates random strings good for use in URIs to identify
 unique objects.
 
 Example usage:
 
-	s := uniuri.New() // s is now "apHCJBl7L1OmC57n"
+```go
+s := uniuri.New() // s is now "apHCJBl7L1OmC57n"
+```
 
 A standard string created by New() is 16 bytes in length and consists of
 Latin upper and lowercase letters, and numbers (from the set of 62 allowed
@@ -23,20 +27,24 @@ read from it.
 Constants
 ---------
 
-	const (
-	    // Standard length of uniuri string to achive ~95 bits of entropy.
-	    StdLen = 16
-	    // Length of uniurl string to achive ~119 bits of entropy, closest
-	    // to what can be losslessly converted to UUIDv4 (122 bits).
-	    UUIDLen = 20
-	)
+```go
+const (
+    // Standard length of uniuri string to achive ~95 bits of entropy.
+    StdLen = 16
+    // Length of uniurl string to achive ~119 bits of entropy, closest
+    // to what can be losslessly converted to UUIDv4 (122 bits).
+    UUIDLen = 20
+)
+```
 
 
 
 Variables
 ---------
 
-	var StdChars = []byte("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
+```go
+var StdChars = []byte("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
+```
 
 Standard characters allowed in uniuri string.
 
@@ -46,22 +54,28 @@ Functions
 
 ### func New
 
-	func New() string
-	
+```go
+func New() string
+```
+
 New returns a new random string of the standard length, consisting of
 standard characters.
 
 ### func NewLen
 
-	func NewLen(length int) string
-	
+```go
+func NewLen(length int) string
+```
+
 NewLen returns a new random string of the provided length, consisting of
 standard characters.
 
 ### func NewLenChars
 
-	func NewLenChars(length int, chars []byte) string
-	
+```go
+func NewLenChars(length int, chars []byte) string
+```
+
 NewLenChars returns a new random string of the provided length, consisting
 of the provided byte slice of allowed characters (maximum 256).
 
