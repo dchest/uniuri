@@ -67,4 +67,5 @@ func NewLenChars(length int, chars []byte) string {
 			}
 		}
 	}
+	panic("unreachable")
 }
