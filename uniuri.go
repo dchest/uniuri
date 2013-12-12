@@ -51,6 +51,8 @@ func NewLenChars(length int, chars []byte) string {
 	clen := byte(len(chars))
 	maxrb := byte(256 - (256 % len(chars)))
 	i := 0
+	var ret string
+	OuterLoop:
 	for {
 		if _, err := io.ReadFull(rand.Reader, r); err != nil {
 			panic("error reading from random source: " + err.Error())
@@ -63,8 +65,10 @@ func NewLenChars(length int, chars []byte) string {
 			b[i] = chars[c%clen]
 			i++
 			if i == length {
-				return string(b)
+				ret = string(b)
+				break OuterLoop
 			}
 		}
 	}
+	return ret
 }
