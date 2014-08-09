@@ -56,7 +56,7 @@ func NewLenChars(length int, chars []byte) string {
 			panic("error reading from random source: " + err.Error())
 		}
 		for _, c := range r {
-			if c >= maxrb {
+			if c > maxrb {
 				// Skip this number to avoid modulo bias.
 				continue
 			}
