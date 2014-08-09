@@ -50,4 +50,9 @@ func TestNewLenChars(t *testing.T) {
 	}
 	// Check that only allowed characters are present
 	validateChars(t, u, chars)
+	// Check that two generated strings are different
+	u2 := NewLenChars(length, chars)
+	if u == u2 {
+		t.Fatalf("not unique: %q and %q", u, u2)
+	}
 }
