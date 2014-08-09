@@ -48,14 +48,18 @@ func NewLen(length int) string {
 func NewLenChars(length int, chars []byte) string {
 	b := make([]byte, length)
 	r := make([]byte, length+(length/4)) // storage for random bytes.
-	clen := byte(len(chars))
-	maxrb := byte(256 - (256 % len(chars)))
+	clen := len(chars)
+	if clen > 256 {
+		panic("uniuri: maximum length of charset for NewLenChars is 256")
+	}
+	maxrb := 256 - (256 % len(chars))
 	i := 0
 	for {
 		if _, err := io.ReadFull(rand.Reader, r); err != nil {
 			panic("error reading from random source: " + err.Error())
 		}
-		for _, c := range r {
+		for _, byte := range r {
+			c := int(byte)
 			if c > maxrb {
 				// Skip this number to avoid modulo bias.
 				continue
