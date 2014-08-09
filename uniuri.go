@@ -58,8 +58,8 @@ func NewLenChars(length int, chars []byte) string {
 		if _, err := io.ReadFull(rand.Reader, r); err != nil {
 			panic("error reading from random source: " + err.Error())
 		}
-		for _, byte := range r {
-			c := int(byte)
+		for _, rb := range r {
+			c := int(rb)
 			if c > maxrb {
 				// Skip this number to avoid modulo bias.
 				continue
