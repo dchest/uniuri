@@ -52,7 +52,7 @@ func NewLenChars(length int, chars []byte) string {
 	if clen > 256 {
 		panic("uniuri: maximum length of charset for NewLenChars is 256")
 	}
-	maxrb := 256 - (256 % len(chars))
+	maxrb := 256 - (256 % clen)
 	i := 0
 	for {
 		if _, err := io.ReadFull(rand.Reader, r); err != nil {
