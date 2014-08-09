@@ -2,13 +2,7 @@ package uniuri
 
 import "testing"
 
-func TestNew(t *testing.T) {
-	u := New()
-	// Check length
-	if len(u) != StdLen {
-		t.Fatalf("wrong length: expected %d, got %d", StdLen, len(u))
-	}
-	// Check that only allowed characters are present
+func validateChars(t *testing.T, u string, chars []byte) {
 	for _, c := range u {
 		var present bool
 		for _, a := range StdChars {
@@ -20,6 +14,17 @@ func TestNew(t *testing.T) {
 			t.Fatalf("chars not allowed in %q", u)
 		}
 	}
+}
+
+func TestNew(t *testing.T) {
+	u := New()
+	// Check length
+	if len(u) != StdLen {
+		t.Fatalf("wrong length: expected %d, got %d", StdLen, len(u))
+	}
+	// Check that only allowed characters are present
+	validateChars(t, u, StdChars)
+
 	// Generate 1000 uniuris and check that they are unique
 	uris := make([]string, 1000)
 	for i, _ := range uris {
@@ -32,4 +37,17 @@ func TestNew(t *testing.T) {
 			}
 		}
 	}
+}
+
+func TestNewLenChars(t *testing.T) {
+	length := 10
+	chars := []byte("01234567")
+	u := NewLenChars(length, chars)
+
+	// Check length
+	if len(u) != length {
+		t.Fatalf("wrong length: expected %d, got %d", StdLen, len(u))
+	}
+	// Check that only allowed characters are present
+	validateChars(t, u, chars)
 }
