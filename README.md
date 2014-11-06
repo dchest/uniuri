@@ -1,7 +1,7 @@
 Package uniuri
 =====================
 
-[![Build Status](https://travis-ci.org/dchest/uniuri.png)](https://travis-ci.org/dchest/uniuri)
+[![Build Status](https://travis-ci.org/dchest/uniuri.svg)](https://travis-ci.org/dchest/uniuri)
 
 ```go
 import "github.com/dchest/uniuri"
