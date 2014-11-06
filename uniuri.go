@@ -1,3 +1,10 @@
+// Written in 2011-2014 by Dmitry Chestnykh
+//
+// The author(s) have dedicated all copyright and related and
+// neighboring rights to this software to the public domain
+// worldwide. Distributed without any warranty.
+// http://creativecommons.org/publicdomain/zero/1.0/
+
 // Package uniuri generates random strings good for use in URIs to identify
 // unique objects.
 //

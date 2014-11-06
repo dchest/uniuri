@@ -81,3 +81,15 @@ func NewLenChars(length int, chars []byte) string
 NewLenChars returns a new random string of the provided length, consisting
 of the provided byte slice of allowed characters (maximum 256).
 
+
+
+Public domain dedication
+------------------------
+
+Written in 2011-2014 by Dmitry Chestnykh
+
+The author(s) have dedicated all copyright and related and
+neighboring rights to this software to the public domain
+worldwide. Distributed without any warranty.
+http://creativecommons.org/publicdomain/zero/1.0/
+
