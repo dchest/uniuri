@@ -12,7 +12,7 @@ import "testing"
 func validateChars(t *testing.T, u string, chars []byte) {
 	for _, c := range u {
 		var present bool
-		for _, a := range StdChars {
+		for _, a := range chars {
 			if rune(a) == c {
 				present = true
 			}
