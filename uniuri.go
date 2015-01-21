@@ -30,7 +30,7 @@ import (
 const (
 	// Standard length of uniuri string to achive ~95 bits of entropy.
 	StdLen = 16
-	// Length of uniurl string to achive ~119 bits of entropy, closest
+	// Length of uniuri string to achive ~119 bits of entropy, closest
 	// to what can be losslessly converted to UUIDv4 (122 bits).
 	UUIDLen = 20
 )
