@@ -34,13 +34,13 @@ func TestNew(t *testing.T) {
 
 	// Generate 1000 uniuris and check that they are unique
 	uris := make([]string, 1000)
-	for i, _ := range uris {
+	for i := range uris {
 		uris[i] = New()
 	}
 	for i, u := range uris {
 		for j, u2 := range uris {
 			if i != j && u == u2 {
-				t.Fatalf("not unique: %d:%q and %d:%q", i, j, u, u2)
+				t.Fatalf("not unique: %d:%q and %d:%q", i, u, j, u2)
 			}
 		}
 	}
