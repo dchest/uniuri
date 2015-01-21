@@ -28,14 +28,14 @@ import (
 )
 
 const (
-	// Standard length of uniuri string to achive ~95 bits of entropy.
+	// StdLen is a standard length of uniuri string to achive ~95 bits of entropy.
 	StdLen = 16
-	// Length of uniuri string to achive ~119 bits of entropy, closest
+	// UUIDLen is a length of uniuri string to achive ~119 bits of entropy, closest
 	// to what can be losslessly converted to UUIDv4 (122 bits).
 	UUIDLen = 20
 )
 
-// Standard characters allowed in uniuri string.
+// StdChars is a set of standard characters allowed in uniuri string.
 var StdChars = []byte("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
 
 // New returns a new random string of the standard length, consisting of
