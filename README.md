@@ -31,12 +31,13 @@ Constants
 
 ```go
 const (
-    // Standard length of uniuri string to achive ~95 bits of entropy.
-    StdLen = 16
-    // Length of uniurl string to achive ~119 bits of entropy, closest
-    // to what can be losslessly converted to UUIDv4 (122 bits).
-    UUIDLen = 20
+	// StdLen is a standard length of uniuri string to achive ~95 bits of entropy.
+	StdLen = 16
+	// UUIDLen is a length of uniuri string to achive ~119 bits of entropy, closest
+	// to what can be losslessly converted to UUIDv4 (122 bits).
+	UUIDLen = 20
 )
+
 ```
 
 
@@ -48,7 +49,8 @@ Variables
 var StdChars = []byte("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
 ```
 
-Standard characters allowed in uniuri string.
+
+StdChars is a set of standard characters allowed in uniuri string.
 
 
 Functions
