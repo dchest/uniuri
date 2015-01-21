@@ -53,6 +53,9 @@ func NewLen(length int) string {
 // NewLenChars returns a new random string of the provided length, consisting
 // of the provided byte slice of allowed characters (maximum 256).
 func NewLenChars(length int, chars []byte) string {
+	if length == 0 {
+		return ""
+	}
 	b := make([]byte, length)
 	r := make([]byte, length+(length/4)) // storage for random bytes.
 	clen := len(chars)
