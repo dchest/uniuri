@@ -46,6 +46,15 @@ func TestNew(t *testing.T) {
 	}
 }
 
+func TestNewLen(t *testing.T) {
+	for i := 0; i < 100; i++ {
+		u := NewLen(i)
+		if len(u) != i {
+			t.Fatalf("request length %d, got %d", i, len(u))
+		}
+	}
+}
+
 func TestNewLenChars(t *testing.T) {
 	length := 10
 	chars := []byte("01234567")
