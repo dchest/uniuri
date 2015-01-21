@@ -53,13 +53,13 @@ func NewLenChars(length int, chars []byte) string {
 	if length == 0 {
 		return ""
 	}
-	b := make([]byte, length)
-	r := make([]byte, length+(length/4)) // storage for random bytes.
 	clen := len(chars)
 	if clen > 256 {
 		panic("uniuri: maximum length of charset for NewLenChars is 256")
 	}
 	maxrb := 256 - (256 % clen)
+	b := make([]byte, length)
+	r := make([]byte, length+(length/4)) // storage for random bytes.
 	i := 0
 	for {
 		if _, err := rand.Read(r); err != nil {
