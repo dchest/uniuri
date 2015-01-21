@@ -22,10 +22,7 @@
 // read from it.
 package uniuri
 
-import (
-	"crypto/rand"
-	"io"
-)
+import "crypto/rand"
 
 const (
 	// StdLen is a standard length of uniuri string to achive ~95 bits of entropy.
@@ -65,7 +62,7 @@ func NewLenChars(length int, chars []byte) string {
 	maxrb := 256 - (256 % clen)
 	i := 0
 	for {
-		if _, err := io.ReadFull(rand.Reader, r); err != nil {
+		if _, err := rand.Read(r); err != nil {
 			panic("error reading from random source: " + err.Error())
 		}
 		for _, rb := range r {
