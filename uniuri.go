@@ -63,7 +63,7 @@ func NewLenChars(length int, chars []byte) string {
 	i := 0
 	for {
 		if _, err := rand.Read(r); err != nil {
-			panic("error reading from random source: " + err.Error())
+			panic("uniuri: error reading random bytes: " + err.Error())
 		}
 		for _, rb := range r {
 			c := int(rb)
