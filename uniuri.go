@@ -54,8 +54,8 @@ func NewLenChars(length int, chars []byte) string {
 		return ""
 	}
 	clen := len(chars)
-	if clen > 256 {
-		panic("uniuri: maximum length of charset for NewLenChars is 256")
+	if clen < 2 || clen > 256 {
+		panic("uniuri: wrong charset length for NewLenChars")
 	}
 	maxrb := 255 - (256 % clen)
 	b := make([]byte, length)
