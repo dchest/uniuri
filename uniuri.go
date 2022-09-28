@@ -22,7 +22,10 @@
 // read from it.
 package uniuri
 
-import "crypto/rand"
+import (
+	"crypto/rand"
+	"math"
+)
 
 const (
 	// StdLen is a standard length of uniuri string to achive ~95 bits of entropy.
@@ -47,6 +50,21 @@ func NewLen(length int) string {
 	return NewLenChars(length, StdChars)
 }
 
+// maxBufLen is the maximum length of a temporary buffer for random bytes.
+const maxBufLen = 2048
+
+// minRegenBufLen is the minimum length of temporary buffer for random bytes
+// to fill after the first rand.Read request didn't produce the full result.
+// If the initial buffer is smaller, this value is ignored.
+// Rationale: for performance, assume it's pointless to request fewer bytes from rand.Read.
+const minRegenBufLen = 16
+
+// estimatedBufLen returns the estimated number of random bytes to request
+// given that byte values greater than maxByte will be rejected.
+func estimatedBufLen(need, maxByte int) int {
+	return int(math.Ceil(float64(need) * (255 / float64(maxByte))))
+}
+
 // NewLenChars returns a new random string of the provided length, consisting
 // of the provided byte slice of allowed characters (maximum 256).
 func NewLenChars(length int, chars []byte) string {
@@ -58,24 +76,39 @@ func NewLenChars(length int, chars []byte) string {
 		panic("uniuri: wrong charset length for NewLenChars")
 	}
 	maxrb := 255 - (256 % clen)
-	b := make([]byte, length)
-	r := make([]byte, length+(length/4)) // storage for random bytes.
+	buflen := estimatedBufLen(length, maxrb)
+	if buflen < length {
+		buflen = length
+	}
+	if buflen > maxBufLen {
+		buflen = maxBufLen
+	}
+	buf := make([]byte, buflen) // storage for random bytes
+	out := make([]byte, length) // storage for result
 	i := 0
 	for {
-		if _, err := rand.Read(r); err != nil {
+		if _, err := rand.Read(buf[:buflen]); err != nil {
 			panic("uniuri: error reading random bytes: " + err.Error())
 		}
-		for _, rb := range r {
+		for _, rb := range buf[:buflen] {
 			c := int(rb)
 			if c > maxrb {
 				// Skip this number to avoid modulo bias.
 				continue
 			}
-			b[i] = chars[c%clen]
+			out[i] = chars[c%clen]
 			i++
 			if i == length {
-				return string(b)
+				return string(out)
 			}
+		}
+		// Adjust new requested length, but no smaller than minRegenBufLen.
+		buflen = estimatedBufLen(length-i, maxrb)
+		if buflen < minRegenBufLen && minRegenBufLen < cap(buf) {
+			buflen = minRegenBufLen
+		}
+		if buflen > maxBufLen {
+			buflen = maxBufLen
 		}
 	}
 }
