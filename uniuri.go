@@ -65,11 +65,11 @@ func estimatedBufLen(need, maxByte int) int {
 	return int(math.Ceil(float64(need) * (255 / float64(maxByte))))
 }
 
-// NewLenChars returns a new random string of the provided length, consisting
+// NewLenCharsBytes returns a new random byte slice of the provided length, consisting
 // of the provided byte slice of allowed characters (maximum 256).
-func NewLenChars(length int, chars []byte) string {
+func NewLenCharsBytes(length int, chars []byte) []byte {
 	if length == 0 {
-		return ""
+		return nil
 	}
 	clen := len(chars)
 	if clen < 2 || clen > 256 {
@@ -99,7 +99,7 @@ func NewLenChars(length int, chars []byte) string {
 			out[i] = chars[c%clen]
 			i++
 			if i == length {
-				return string(out)
+				return out
 			}
 		}
 		// Adjust new requested length, but no smaller than minRegenBufLen.
@@ -111,4 +111,15 @@ func NewLenChars(length int, chars []byte) string {
 			buflen = maxBufLen
 		}
 	}
+}
+
+// NewLenChars returns a new random string of the provided length, consisting
+// of the provided byte slice of allowed characters (maximum 256).
+func NewLenChars(length int, chars []byte) string {
+	b := NewLenCharsBytes(length, chars)
+	if b == nil {
+		return ""
+	}
+
+	return string(b)
 }
