@@ -7,7 +7,24 @@
 
 package uniuri
 
-import "testing"
+import (
+	"bytes"
+	"testing"
+)
+
+func validateBytes(t *testing.T, u []byte, chars []byte) {
+	for _, c := range u {
+		var present bool
+		for _, a := range chars {
+			if a == c {
+				present = true
+			}
+		}
+		if !present {
+			t.Fatalf("chars not allowed in %q", u)
+		}
+	}
+}
 
 func validateChars(t *testing.T, u string, chars []byte) {
 	for _, c := range u {
@@ -52,6 +69,25 @@ func TestNewLen(t *testing.T) {
 		if len(u) != i {
 			t.Fatalf("request length %d, got %d", i, len(u))
 		}
+	}
+}
+
+func TestNewLenCharsBytes(t *testing.T) {
+	length := 10
+	chars := []byte("01234567")
+	u := NewLenCharsBytes(length, chars)
+
+	// Check length
+	if len(u) != length {
+		t.Fatalf("wrong length: expected %d, got %d", StdLen, len(u))
+	}
+	// Check that only allowed characters are present
+	validateBytes(t, u, chars)
+
+	// Check that two generated strings are different
+	u2 := NewLenCharsBytes(length, chars)
+	if bytes.Equal(u, u2) {
+		t.Fatalf("not unique: %q and %q", u, u2)
 	}
 }
 
