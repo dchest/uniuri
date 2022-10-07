@@ -116,10 +116,5 @@ func NewLenCharsBytes(length int, chars []byte) []byte {
 // NewLenChars returns a new random string of the provided length, consisting
 // of the provided byte slice of allowed characters (maximum 256).
 func NewLenChars(length int, chars []byte) string {
-	b := NewLenCharsBytes(length, chars)
-	if b == nil {
-		return ""
-	}
-
-	return string(b)
+	return string(NewLenCharsBytes(length, chars))
 }
