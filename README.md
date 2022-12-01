@@ -29,11 +29,11 @@ Constants
 
 ```go
 const (
-// StdLen is a standard length of uniuri string to achive ~95 bits of entropy.
-StdLen = 16
-// UUIDLen is a length of uniuri string to achive ~119 bits of entropy, closest
-// to what can be losslessly converted to UUIDv4 (122 bits).
-UUIDLen = 20
+        // StdLen is a standard length of uniuri string to achive ~95 bits of entropy.
+        StdLen = 16
+        // UUIDLen is a length of uniuri string to achive ~119 bits of entropy, closest
+        // to what can be losslessly converted to UUIDv4 (122 bits).
+        UUIDLen = 20
 )
 
 ```
