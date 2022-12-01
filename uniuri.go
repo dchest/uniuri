@@ -36,18 +36,47 @@ const (
 )
 
 // StdChars is a set of standard characters allowed in uniuri string.
+// Deprecated: use functional options instead of slice modification
 var StdChars = []byte("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
 
 // New returns a new random string of the standard length, consisting of
-// standard characters.
-func New() string {
-	return NewLenChars(StdLen, StdChars)
+// standard characters if no custom options given.
+func New(opts ...Opt) string {
+	return string(NewBytes(opts...))
+}
+
+// NewBytes returns a new random byte slice of the provided length, consisting
+// of the provided byte slice of allowed characters (maximum 256).
+func NewBytes(opts ...Opt) []byte {
+	o := options{
+		length: StdLen,
+		chars:  StdChars,
+	}
+	for _, opt := range opts {
+		opt(&o)
+	}
+	return generate(o.length, o.chars)
 }
 
 // NewLen returns a new random string of the provided length, consisting of
 // standard characters.
+// Deprecated: Use New with proper options instead.
 func NewLen(length int) string {
-	return NewLenChars(length, StdChars)
+	return New(Length(length))
+}
+
+// NewLenChars returns a new random string of the provided length, consisting
+// of the provided byte slice of allowed characters (maximum 256).
+// Deprecated: Use New with proper options instead.
+func NewLenChars(length int, chars []byte) string {
+	return string(New(Length(length), Chars(chars)))
+}
+
+// NewLenCharsBytes returns a new random byte slice of the provided length, consisting
+// of the provided byte slice of allowed characters (maximum 256).
+// Deprecated: Use NewBytes with proper options instead.
+func NewLenCharsBytes(length int, chars []byte) []byte {
+	return NewBytes(Length(length), Chars(chars))
 }
 
 // maxBufLen is the maximum length of a temporary buffer for random bytes.
@@ -65,9 +94,9 @@ func estimatedBufLen(need, maxByte int) int {
 	return int(math.Ceil(float64(need) * (255 / float64(maxByte))))
 }
 
-// NewLenCharsBytes returns a new random byte slice of the provided length, consisting
+// generate creates a new random byte slice of the provided length, consisting
 // of the provided byte slice of allowed characters (maximum 256).
-func NewLenCharsBytes(length int, chars []byte) []byte {
+func generate(length int, chars []byte) []byte {
 	if length == 0 {
 		return nil
 	}
@@ -113,8 +142,25 @@ func NewLenCharsBytes(length int, chars []byte) []byte {
 	}
 }
 
-// NewLenChars returns a new random string of the provided length, consisting
-// of the provided byte slice of allowed characters (maximum 256).
-func NewLenChars(length int, chars []byte) string {
-	return string(NewLenCharsBytes(length, chars))
+// options is a set of variables to be used to generate random values
+type options struct {
+	length int
+	chars  []byte
+}
+
+// Opt is a function to set specific value to options
+type Opt func(opts *options)
+
+// Length sets length to options
+func Length(length int) Opt {
+	return func(opts *options) {
+		opts.length = length
+	}
+}
+
+// Chars sets chars slice to options
+func Chars(chars []byte) Opt {
+	return func(opts *options) {
+		opts.chars = chars
+	}
 }
