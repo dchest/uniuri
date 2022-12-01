@@ -8,122 +8,122 @@
 package uniuri
 
 import (
-	"bytes"
 	"testing"
 )
 
-func validateBytes(t *testing.T, u []byte, chars []byte) {
-	for _, c := range u {
-		var present bool
-		for _, a := range chars {
-			if a == c {
-				present = true
+var (
+	testCharSet = []byte("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
+)
+
+func Test_New(t *testing.T) {
+	testCases := []struct {
+		name           string
+		options        []Opt
+		expectedLength int
+		expectedChars  []byte
+	}{
+		{
+			name:           "default",
+			expectedLength: 16,
+			expectedChars:  testCharSet,
+		},
+		{
+			name:           "with_length",
+			options:        []Opt{Length(24)},
+			expectedLength: 24,
+			expectedChars:  testCharSet,
+		},
+		{
+			name:           "with_chars",
+			options:        []Opt{Chars(threeChars)},
+			expectedLength: 16,
+			expectedChars:  threeChars,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			u := New(tc.options...)
+
+			if len(u) != tc.expectedLength {
+				t.Errorf("wrong length: expected %d, got %d", tc.expectedLength, len(u))
 			}
-		}
-		if !present {
-			t.Fatalf("chars not allowed in %q", u)
-		}
-	}
-}
 
-func validateChars(t *testing.T, u string, chars []byte) {
-	for _, c := range u {
-		var present bool
-		for _, a := range chars {
-			if rune(a) == c {
-				present = true
+			allowedChars := make(map[rune]struct{})
+			for _, c := range tc.expectedChars {
+				allowedChars[rune(c)] = struct{}{}
 			}
-		}
-		if !present {
-			t.Fatalf("chars not allowed in %q", u)
-		}
-	}
-}
-
-func TestNew(t *testing.T) {
-	u := New()
-	// Check length
-	if len(u) != StdLen {
-		t.Fatalf("wrong length: expected %d, got %d", StdLen, len(u))
-	}
-	// Check that only allowed characters are present
-	validateChars(t, u, StdChars)
-
-	// Generate 1000 uniuris and check that they are unique
-	uris := make([]string, 1000)
-	for i := range uris {
-		uris[i] = New()
-	}
-	for i, u := range uris {
-		for j, u2 := range uris {
-			if i != j && u == u2 {
-				t.Fatalf("not unique: %d:%q and %d:%q", i, u, j, u2)
+			for _, r := range []rune(u) {
+				if _, ok := allowedChars[r]; !ok {
+					t.Errorf("character not allowed: %s", string(r))
+				}
 			}
+		})
+	}
+}
+
+func Test_NewBytes(t *testing.T) {
+	testCases := []struct {
+		name           string
+		options        []Opt
+		expectedLength int
+		expectedChars  []byte
+	}{
+		{
+			name:           "default",
+			expectedLength: 16,
+			expectedChars:  testCharSet,
+		},
+		{
+			name:           "with_length",
+			options:        []Opt{Length(24)},
+			expectedLength: 24,
+			expectedChars:  testCharSet,
+		},
+		{
+			name:           "with_chars",
+			options:        []Opt{Chars(threeChars)},
+			expectedLength: 16,
+			expectedChars:  threeChars,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			u := NewBytes(tc.options...)
+
+			if len(u) != tc.expectedLength {
+				t.Errorf("wrong length: expected %d, got %d", tc.expectedLength, len(u))
+			}
+
+			allowedChars := make(map[rune]struct{})
+			for _, c := range tc.expectedChars {
+				allowedChars[rune(c)] = struct{}{}
+			}
+			for _, b := range u {
+				if _, ok := allowedChars[rune(b)]; !ok {
+					t.Errorf("character not allowed: %s", string(b))
+				}
+			}
+		})
+	}
+}
+
+func Test_unique(t *testing.T) {
+	uris := make(map[string]struct{})
+	for i := 0; i < 10000; i++ {
+		u := New()
+		if _, ok := uris[u]; ok {
+			t.Fatalf("non-unique uniuri: %s", u)
 		}
+		uris[u] = struct{}{}
 	}
 }
 
-func TestNewLen(t *testing.T) {
-	for i := 0; i < 100; i++ {
-		u := NewLen(i)
-		if len(u) != i {
-			t.Fatalf("request length %d, got %d", i, len(u))
-		}
-	}
-}
-
-func TestNewLenCharsBytes(t *testing.T) {
-	length := 10
-	chars := []byte("01234567")
-	u := NewLenCharsBytes(length, chars)
-
-	// Check length
-	if len(u) != length {
-		t.Fatalf("wrong length: expected %d, got %d", StdLen, len(u))
-	}
-	// Check that only allowed characters are present
-	validateBytes(t, u, chars)
-
-	// Check that two generated strings are different
-	u2 := NewLenCharsBytes(length, chars)
-	if bytes.Equal(u, u2) {
-		t.Fatalf("not unique: %q and %q", u, u2)
-	}
-}
-
-func TestNewLenChars(t *testing.T) {
-	length := 10
-	chars := []byte("01234567")
-	u := NewLenChars(length, chars)
-
-	// Check length
-	if len(u) != length {
-		t.Fatalf("wrong length: expected %d, got %d", StdLen, len(u))
-	}
-	// Check that only allowed characters are present
-	validateChars(t, u, chars)
-
-	// Check that two generated strings are different
-	u2 := NewLenChars(length, chars)
-	if u == u2 {
-		t.Fatalf("not unique: %q and %q", u, u2)
-	}
-}
-
-func TestNewLenCharsMaxLength(t *testing.T) {
-	defer func() {
-		if r := recover(); r == nil {
-			t.Fatal("didn't panic")
-		}
-	}()
-	chars := make([]byte, 257)
-	NewLenChars(32, chars)
-}
-
-func TestBias(t *testing.T) {
+func Test_bias(t *testing.T) {
 	chars := []byte("abcdefghijklmnopqrstuvwxyz")
 	slen := 100000
-	s := NewLenChars(slen, chars)
+	s := New(Length(slen), Chars(chars))
 	counts := make(map[rune]int)
 	for _, b := range s {
 		counts[b]++
@@ -134,59 +134,5 @@ func TestBias(t *testing.T) {
 		if diff < 0.95 || diff > 1.05 {
 			t.Errorf("Possible bias on '%c': expected average %f, got %d", k, avg, n)
 		}
-	}
-}
-
-var (
-	sixtyFourChars = append(StdChars, []byte{'+', '/'}...)
-	sixtyFiveChars = append(sixtyFourChars, []byte{'.'}...)
-	threeChars     = []byte{'a', 'b', 'c'}
-)
-
-func BenchmarkLen16Chars65(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		_ = NewLenChars(StdLen, sixtyFiveChars)
-	}
-}
-
-func BenchmarkLen16Chars64(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		_ = NewLenChars(StdLen, sixtyFourChars)
-	}
-}
-
-func BenchmarkLen16Chars62(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		_ = NewLenChars(StdLen, StdChars)
-	}
-}
-
-func BenchmarkLen16Chars3(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		_ = NewLenChars(StdLen, threeChars)
-	}
-}
-
-func BenchmarkLen1024Chars65(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		_ = NewLenChars(1024, sixtyFiveChars)
-	}
-}
-
-func BenchmarkLen1024Chars64(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		_ = NewLenChars(1024, sixtyFourChars)
-	}
-}
-
-func BenchmarkLen1024Chars62(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		_ = NewLenChars(1024, StdChars)
-	}
-}
-
-func BenchmarkLen1024Chars3(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		_ = NewLenChars(1024, threeChars)
 	}
 }

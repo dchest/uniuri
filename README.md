@@ -29,16 +29,14 @@ Constants
 
 ```go
 const (
-	// StdLen is a standard length of uniuri string to achive ~95 bits of entropy.
-	StdLen = 16
-	// UUIDLen is a length of uniuri string to achive ~119 bits of entropy, closest
-	// to what can be losslessly converted to UUIDv4 (122 bits).
-	UUIDLen = 20
+// StdLen is a standard length of uniuri string to achive ~95 bits of entropy.
+StdLen = 16
+// UUIDLen is a length of uniuri string to achive ~119 bits of entropy, closest
+// to what can be losslessly converted to UUIDv4 (122 bits).
+UUIDLen = 20
 )
 
 ```
-
-
 
 Variables
 ---------
@@ -47,8 +45,8 @@ Variables
 var StdChars = []byte("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
 ```
 
-
-StdChars is a set of standard characters allowed in uniuri string.
+StdChars is a set of standard characters allowed in uniuri string. It will be used by default by `New` and `NewBytes`
+functions unless option `Chars` given.
 
 
 Functions
@@ -57,30 +55,37 @@ Functions
 ### func New
 
 ```go
-func New() string
+func New(opts ...Opt) string
 ```
 
-New returns a new random string of the standard length, consisting of
-standard characters.
+New returns a new random string. It accepts zero or more functional options to change output.
 
 ### func NewLen
 
 ```go
-func NewLen(length int) string
+func NewBytes(opts ...Opt) string
 ```
 
-NewLen returns a new random string of the provided length, consisting of
-standard characters.
+New returns a new slice of random bytes. It accepts zero or more functional options to change output.
 
-### func NewLenChars
+Options
+---------
+
+### func Length
 
 ```go
-func NewLenChars(length int, chars []byte) string
+func Length(length int) Opt
 ```
 
-NewLenChars returns a new random string of the provided length, consisting
-of the provided byte slice of allowed characters (maximum 256).
+Sets length of random string or slice of bytes to be generated.
 
+### func Chars
+
+```go
+func Chars(chars []byte) Opt
+```
+
+Sets allowed characters to be used upon random string or slice of bytes generation.
 
 
 Public domain dedication

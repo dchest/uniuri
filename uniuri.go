@@ -39,8 +39,7 @@ const (
 // Deprecated: use functional options instead of slice modification
 var StdChars = []byte("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
 
-// New returns a new random string of the standard length, consisting of
-// standard characters if no custom options given.
+// New returns a new random string or byte slice consisting of allowed characters.
 func New(opts ...Opt) string {
 	return string(NewBytes(opts...))
 }
